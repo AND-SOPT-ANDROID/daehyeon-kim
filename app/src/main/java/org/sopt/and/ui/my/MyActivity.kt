@@ -10,9 +10,14 @@ class MyActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val userEmail = intent.getStringExtra("email") ?: ""
+
         setContent{
             ANDANDROIDTheme {
-
+                MyScreen(
+                    userName = userEmail
+                )
             }
         }
     }

@@ -32,6 +32,7 @@ class SignInActivity : ComponentActivity() {
                                 Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
                                 Intent(this, MyActivity::class.java).apply {
                                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                    putExtra("email", inputEmail)
                                     startActivity(this)
                                 }
                             }
