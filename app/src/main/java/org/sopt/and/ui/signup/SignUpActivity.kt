@@ -18,7 +18,7 @@ class SignUpActivity : ComponentActivity() {
         setContent {
             ANDANDROIDTheme {
                 SignUpScreen(
-                    onSignUp = { email, password ->
+                    onSignUpClick = { email, password ->
                         when {
                             !isEmailValid(email) -> {
                                 Toast.makeText(this, "잘못된 이메일 형식입니다.", Toast.LENGTH_SHORT).show()

@@ -44,7 +44,7 @@ import org.sopt.and.util.isPasswordValid
 
 @Composable
 fun SignUpScreen(
-    onSignUp: (String, String) -> Unit = { _, _ ->}
+    onSignUpClick: (String, String) -> Unit = { _, _ ->}
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -54,7 +54,7 @@ fun SignUpScreen(
         bottomBar = {
             SignUpBottomBar(
                 isEnabled = isButtonEnabled(email, password),
-                onSignUp = { onSignUp(email, password) }
+                onSignUpClick = { onSignUpClick(email, password) }
             )
         },
         containerColor = Color.Black,
@@ -99,7 +99,7 @@ private fun SignUpTopBar() {
 @Composable
 private fun SignUpBottomBar(
     isEnabled: Boolean,
-    onSignUp: () -> Unit = {}
+    onSignUpClick: () -> Unit = {}
 ) {
     BottomAppBar(
         containerColor = if (isEnabled) Color.Blue else Color.Gray,
@@ -111,7 +111,7 @@ private fun SignUpBottomBar(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .clickable(enabled = isEnabled) { onSignUp() }
+                .clickable(enabled = isEnabled) { onSignUpClick() }
         ) {
             Text(
                 text = "Wavve 회원가입",
