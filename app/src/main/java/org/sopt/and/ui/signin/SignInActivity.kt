@@ -3,7 +3,6 @@ package org.sopt.and.ui.signin
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -24,7 +23,6 @@ class SignInActivity : ComponentActivity() {
             result.data?.let { data ->
                 userEmail = data.getStringExtra("email") ?: ""
                 userPassword = data.getStringExtra("password") ?: ""
-                Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -40,10 +38,10 @@ class SignInActivity : ComponentActivity() {
                             Intent(this, SignUpActivity::class.java)
                         )
                     },
-                    onSignInClick = { inputEmail, inputPassword ->
+                    onSignInClick = { inputEmail, inputPassword, showSnackbar ->
                         when {
                             inputEmail == userEmail && inputPassword == userPassword -> {
-                                Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
+                                showSnackbar("로그인 성공")
                                 Intent(this, MyActivity::class.java).apply {
                                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                     putExtra("email", inputEmail)
@@ -51,10 +49,10 @@ class SignInActivity : ComponentActivity() {
                                 }
                             }
                             inputEmail == userEmail -> {
-                                Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                                showSnackbar("비밀번호가 일치하지 않습니다.")
                             }
                             else -> {
-                                Toast.makeText(this, "이메일 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                                showSnackbar("이메일 또는 비밀번호가 일치하지 않습니다.")
                             }
                         }
                     }
