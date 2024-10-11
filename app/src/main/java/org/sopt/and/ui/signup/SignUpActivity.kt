@@ -1,12 +1,12 @@
 package org.sopt.and.ui.signup
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import org.sopt.and.ui.signin.SignInActivity
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 import org.sopt.and.util.isEmailValid
 import org.sopt.and.util.isPasswordValid
@@ -27,11 +27,12 @@ class SignUpActivity : ComponentActivity() {
                                 Toast.makeText(this, "잘못된 비밀번호 형식입니다.", Toast.LENGTH_SHORT).show()
                             }
                             else -> {
-                                Intent(this, SignInActivity::class.java).apply {
+                                val resultIntent = Intent().apply {
                                     putExtra("email", email)
                                     putExtra("password", password)
-                                    startActivity(this)
                                 }
+                                setResult(Activity.RESULT_OK, resultIntent)
+                                finish()
                             }
                         }
                     }

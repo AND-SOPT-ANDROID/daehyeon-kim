@@ -1,30 +1,44 @@
 package org.sopt.and.ui.signin
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import org.sopt.and.ui.my.MyActivity
 import org.sopt.and.ui.signup.SignUpActivity
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 
 class SignInActivity : ComponentActivity() {
+
+    private var userEmail = ""
+    private var userPassword = ""
+
+    private val signUpLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let { data ->
+                userEmail = data.getStringExtra("email") ?: ""
+                userPassword = data.getStringExtra("password") ?: ""
+                Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        val userEmail = intent.getStringExtra("email") ?: ""
-        val userPassword = intent.getStringExtra("password") ?: ""
-
         setContent {
             ANDANDROIDTheme {
                 SignInScreen(
                     onSignUpClick = {
-                        Intent(this, SignUpActivity::class.java).apply {
-                            startActivity(this)
-                        }
+                        signUpLauncher.launch(
+                            Intent(this, SignUpActivity::class.java)
+                        )
                     },
                     onSignInClick = { inputEmail, inputPassword ->
                         when {
