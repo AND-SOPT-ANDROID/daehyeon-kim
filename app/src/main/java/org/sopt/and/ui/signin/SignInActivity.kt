@@ -13,16 +13,16 @@ import org.sopt.and.ui.theme.ANDANDROIDTheme
 
 class SignInActivity : ComponentActivity() {
 
-    private var userEmail = ""
-    private var userPassword = ""
+    private var userEmail: String? = null
+    private var userPassword: String? = null
 
     private val signUpLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let { data ->
-                userEmail = data.getStringExtra("email") ?: ""
-                userPassword = data.getStringExtra("password") ?: ""
+                userEmail = data.getStringExtra("email")
+                userPassword = data.getStringExtra("password")
             }
         }
     }
