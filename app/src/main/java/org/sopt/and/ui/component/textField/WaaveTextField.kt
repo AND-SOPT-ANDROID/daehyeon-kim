@@ -31,7 +31,9 @@ fun WaaveTextField(
                 color = Color.LightGray
             )
         },
-        trailingIcon = trailingIcon,
+        trailingIcon = trailingIcon?.let {
+            @Composable { it() }
+        },
         isError = isError,
         visualTransformation = visualTransformation,
         shape = RoundedCornerShape(10.dp),
