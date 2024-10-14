@@ -59,5 +59,16 @@ class SignInActivity : ComponentActivity() {
                 )
             }
         }
+
+        savedInstanceState?.let {
+            userEmail = it.getString("USER_EMAIL")
+            userPassword = it.getString("USER_PASSWORD")
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("USER_EMAIL", userEmail)
+        outState.putString("USER_PASSWORD", userPassword)
     }
 }
