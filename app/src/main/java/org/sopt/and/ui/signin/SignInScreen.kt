@@ -38,12 +38,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import org.sopt.and.model.SignInInfo
 import org.sopt.and.ui.component.textField.WaaveTextField
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 
 @Composable
 fun SignInScreen(
-    onSignInClick: (String, String, (String) -> Unit) -> Unit = { _, _, _ -> },
+    onSignInClick: (SignInInfo, snackbarMessage: (String) -> Unit) -> Unit = { _, _ -> },
     onSignUpClick: () -> Unit = {}
 ) {
     var email by remember { mutableStateOf("") }
@@ -63,7 +64,7 @@ fun SignInScreen(
                 password = password,
                 onPasswordChanged = { password = it },
                 onSignInClick = {
-                    onSignInClick(email, password) { message ->
+                    onSignInClick(SignInInfo(email, password)) { message ->
                         scope.launch {
                             snackbarHostState.showSnackbar(message)
                         }

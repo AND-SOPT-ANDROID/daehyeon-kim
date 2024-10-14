@@ -38,17 +38,17 @@ class SignInActivity : ComponentActivity() {
                             Intent(this, SignUpActivity::class.java)
                         )
                     },
-                    onSignInClick = { inputEmail, inputPassword, showSnackbar ->
+                    onSignInClick = { signInInfo, showSnackbar ->
                         when {
-                            inputEmail == userEmail && inputPassword == userPassword -> {
+                            signInInfo.email == userEmail && signInInfo.password == userPassword -> {
                                 showSnackbar("로그인 성공")
                                 Intent(this, MyActivity::class.java).apply {
                                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                    putExtra("email", inputEmail)
+                                    putExtra("email", signInInfo.email)
                                     startActivity(this)
                                 }
                             }
-                            inputEmail == userEmail -> {
+                            signInInfo.email == userEmail -> {
                                 showSnackbar("비밀번호가 일치하지 않습니다.")
                             }
                             else -> {
