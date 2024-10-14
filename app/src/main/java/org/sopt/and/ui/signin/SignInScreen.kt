@@ -3,7 +3,6 @@ package org.sopt.and.ui.signin
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -57,9 +56,8 @@ fun SignInScreen(
         topBar = { SignInTopBar() },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = Color.Black,
-        content = { padding ->
+        content = { innerPadding ->
             SignInContent(
-                padding = padding,
                 email = email,
                 onEmailChanged = { email = it },
                 password = password,
@@ -71,7 +69,11 @@ fun SignInScreen(
                         }
                     }
                 },
-                onSignUpClick = { onSignUpClick() }
+                onSignUpClick = onSignUpClick,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 15.dp, vertical = 35.dp)
             )
         }
     )
@@ -102,32 +104,27 @@ fun SignInTopBar() {
 
 @Composable
 fun SignInContent(
-    padding: PaddingValues,
     email: String,
     onEmailChanged: (String) -> Unit,
     password: String,
     onPasswordChanged: (String) -> Unit,
     onSignInClick: () -> Unit = {},
     onSignUpClick: () -> Unit,
+    modifier: Modifier
 ) {
 
     var showPassword by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)
-            .padding(horizontal = 15.dp)
-            .padding(top = 45.dp)
+        modifier = modifier
     ) {
-
         WaaveTextField(
             value = email,
             onValueChange = onEmailChanged,
             placeholderValue = "이메일 주소 또는 아이디"
         )
 
-        Spacer(modifier = Modifier.padding(3.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         WaaveTextField(
             value = password,
@@ -146,7 +143,7 @@ fun SignInContent(
             visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
         )
 
-        Spacer(modifier = Modifier.padding(15.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         Button(
             onClick = onSignInClick,
@@ -161,7 +158,7 @@ fun SignInContent(
             )
         }
 
-        Spacer(modifier = Modifier.padding(10.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Row(
             horizontalArrangement = Arrangement.Center,
