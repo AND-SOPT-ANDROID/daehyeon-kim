@@ -1,7 +1,8 @@
 package org.sopt.and.util
 
-fun isEmailValid(email: String): Boolean =
-    "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex().matches(email)
+val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
+
+fun isEmailValid(email: String): Boolean = emailRegex.matches(email)
 
 fun isPasswordValid(password: String): Boolean {
     val minLength = password.length in 8..20
