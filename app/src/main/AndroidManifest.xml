@@ -23,10 +23,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.signup.SignUpActivity">
+            android:name=".ui.signup.SignUpActivity"
+            android:exported="false">
         </activity>
         <activity
-            android:name=".ui.my.MyActivity">
+            android:name=".ui.my.MyActivity"
+            android:exported="false">
         </activity>
     </application>
 
