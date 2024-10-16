@@ -11,7 +11,7 @@ class MyActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val userEmail = intent.getStringExtra("email") ?: ""
+        val userEmail = intent.getStringExtra(EMAIL) ?: ""
 
         setContent{
             ANDANDROIDTheme {
@@ -20,5 +20,9 @@ class MyActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    companion object {
+        private const val EMAIL = "email"
     }
 }

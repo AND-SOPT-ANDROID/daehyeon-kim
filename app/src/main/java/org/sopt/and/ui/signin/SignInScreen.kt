@@ -32,12 +32,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import org.sopt.and.R
 import org.sopt.and.model.SignInInfo
 import org.sopt.and.ui.component.textField.WaaveTextField
 import org.sopt.and.ui.theme.ANDANDROIDTheme
@@ -86,7 +88,7 @@ fun SignInTopBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Wavve",
+                text = stringResource(R.string.waave),
                 color = Color.White
             )
         },
@@ -94,7 +96,7 @@ fun SignInTopBar() {
             IconButton(onClick = {}) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "",
+                    contentDescription = Icons.AutoMirrored.Filled.ArrowBack.name,
                     tint = Color.White
                 )
             }
@@ -122,7 +124,7 @@ fun SignInContent(
         WaaveTextField(
             value = email,
             onValueChange = onEmailChanged,
-            placeholderValue = "이메일 주소 또는 아이디"
+            placeholderValue = stringResource(R.string.email_or_id),
         )
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -130,13 +132,13 @@ fun SignInContent(
         WaaveTextField(
             value = password,
             onValueChange = onPasswordChanged,
-            placeholderValue = "비밀번호",
+            placeholderValue = stringResource(R.string.password),
             trailingIcon = {
                 TextButton(
                     onClick = { showPassword = !showPassword }
                 ) {
                     Text(
-                        text = if (showPassword) "hide" else "show",
+                        text = if (showPassword) stringResource(R.string.password_hide) else stringResource(R.string.password_show),
                         color = Color.White
                     )
                 }
@@ -154,7 +156,7 @@ fun SignInContent(
                 .wrapContentHeight()
         ) {
             Text(
-                text = "로그인",
+                text = stringResource(R.string.login),
                 fontSize = 18.sp
             )
         }
@@ -166,25 +168,25 @@ fun SignInContent(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "아이디 찾기",
+                text = stringResource(R.string.find_id),
                 color = Color.White
             )
             Text(
-                text = "ㅣ",
+                text = stringResource(R.string.pipe_character),
                 color = Color.White,
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
             Text(
-                text = "비밀번호 재설정",
+                text = stringResource(R.string.reset_password),
                 color = Color.White
             )
             Text(
-                text = "ㅣ",
+                text = stringResource(R.string.pipe_character),
                 color = Color.White,
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
             Text(
-                text = "회원가입",
+                text = stringResource(R.string.sign_up),
                 color = Color.White,
                 modifier = Modifier.clickable { onSignUpClick() }
             )

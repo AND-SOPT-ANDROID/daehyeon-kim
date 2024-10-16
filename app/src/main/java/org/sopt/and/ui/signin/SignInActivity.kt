@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import org.sopt.and.R
 import org.sopt.and.ui.my.MyActivity
 import org.sopt.and.ui.signup.SignUpActivity
 import org.sopt.and.ui.theme.ANDANDROIDTheme
@@ -21,8 +22,8 @@ class SignInActivity : ComponentActivity() {
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let { data ->
-                userEmail = data.getStringExtra("email")
-                userPassword = data.getStringExtra("password")
+                userEmail = data.getStringExtra(EMAIL)
+                userPassword = data.getStringExtra(PASSWORD)
             }
         }
     }
@@ -41,18 +42,18 @@ class SignInActivity : ComponentActivity() {
                     onSignInClick = { signInInfo, showSnackbar ->
                         when {
                             signInInfo.email == userEmail && signInInfo.password == userPassword -> {
-                                showSnackbar("로그인 성공")
+                                showSnackbar(getString(R.string.login_success))
                                 Intent(this, MyActivity::class.java).apply {
                                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                    putExtra("email", signInInfo.email)
+                                    putExtra(EMAIL, signInInfo.email)
                                     startActivity(this)
                                 }
                             }
                             signInInfo.email == userEmail -> {
-                                showSnackbar("비밀번호가 일치하지 않습니다.")
+                                showSnackbar(getString(R.string.incorrect_password))
                             }
                             else -> {
-                                showSnackbar("이메일 또는 비밀번호가 일치하지 않습니다.")
+                                showSnackbar(getString(R.string.incorrect_email_or_password))
                             }
                         }
                     }
@@ -61,14 +62,21 @@ class SignInActivity : ComponentActivity() {
         }
 
         savedInstanceState?.let {
-            userEmail = it.getString("USER_EMAIL")
-            userPassword = it.getString("USER_PASSWORD")
+            userEmail = it.getString(USER_EMAIL)
+            userPassword = it.getString(USER_PASSWORD)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("USER_EMAIL", userEmail)
-        outState.putString("USER_PASSWORD", userPassword)
+        outState.putString(USER_EMAIL, userEmail)
+        outState.putString(USER_PASSWORD, userPassword)
+    }
+
+    companion object {
+        private const val EMAIL = "email"
+        private const val PASSWORD = "password"
+        private const val USER_EMAIL = "USER_EMAIL"
+        private const val USER_PASSWORD = "USER_PASSWORD"
     }
 }

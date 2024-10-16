@@ -29,12 +29,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.sopt.and.R
 import org.sopt.and.ui.component.textField.WaaveTextField
 import org.sopt.and.ui.signup.component.InfoText
 import org.sopt.and.ui.theme.ANDANDROIDTheme
@@ -76,7 +78,7 @@ private fun SignUpTopBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "회원가입",
+                text = stringResource(R.string.sign_up),
                 color = Color.White,
                 fontSize = 18.sp
             )
@@ -87,7 +89,7 @@ private fun SignUpTopBar() {
             ) {
                 Icon(
                     imageVector = Icons.Default.Clear,
-                    contentDescription = "",
+                    contentDescription = Icons.Default.Clear.name,
                     tint = Color.White
                 )
             }
@@ -114,7 +116,7 @@ private fun SignUpBottomBar(
                 .clickable(enabled = isEnabled) { onSignUpClick() }
         ) {
             Text(
-                text = "Wavve 회원가입",
+                text = stringResource(R.string.sign_up_btn),
                 color = Color.White
             )
         }
@@ -138,8 +140,7 @@ fun SignUpContent(
             .padding(vertical = 15.dp, horizontal = 25.dp)
     ) {
         Text(
-            text = "이메일과 비밀번호만으로" +
-                    "\nWavve를 즐길 수 있어요!",
+            text = stringResource(R.string.welcome_message),
             color = Color.White,
             fontSize = 24.sp,
             fontWeight = FontWeight.Medium,
@@ -151,26 +152,26 @@ fun SignUpContent(
         WaaveTextField(
             value = email,
             onValueChange = onEmailChanged,
-            placeholderValue = "Wavve@example.com",
+            placeholderValue = stringResource(R.string.email_placeholder),
             isError = email.isNotEmpty() && !isEmailValid(email)
         )
 
         Spacer(modifier = Modifier.padding(5.dp))
 
-        InfoText("로그인, 비밀번호 찾기, 알림에 사용되니 정확한 이메일을 입력해 주세요.")
+        InfoText(text = stringResource(R.string.email_info))
 
         Spacer(modifier = Modifier.padding(12.dp))
 
         WaaveTextField(
             value = password,
             onValueChange = onPasswordChanged,
-            placeholderValue = "Wavve 비밀번호 설정",
+            placeholderValue = stringResource(R.string.password_placeholder),
             trailingIcon = {
                 TextButton(
                     onClick = { showPassword = !showPassword }
                 ) {
                     Text(
-                        text = if (showPassword) "hide" else "show",
+                        text = if (showPassword) stringResource(R.string.password_hide) else stringResource(R.string.password_show),
                         color = Color.White
                     )
                 }
@@ -181,7 +182,7 @@ fun SignUpContent(
 
         Spacer(modifier = Modifier.padding(5.dp))
 
-        InfoText("비밀번호는 8 ~ 20자 이내로 영문, 대소문자, 숫자, 특수문자 중 3가지 이상 혼용하여 입력해 주세요.")
+        InfoText(text = stringResource(R.string.password_info))
     }
 }
 

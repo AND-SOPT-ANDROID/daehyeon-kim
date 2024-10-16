@@ -25,8 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.and.R
 import org.sopt.and.ui.theme.ANDANDROIDTheme
 
 @Composable
@@ -58,7 +60,7 @@ fun MyScreenTopBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "",
+                    contentDescription = Icons.Default.AccountCircle.name,
                     modifier = Modifier.size(60.dp)
                 )
                 Text(
@@ -73,7 +75,7 @@ fun MyScreenTopBar(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Notifications,
-                    contentDescription = "",
+                    contentDescription = Icons.Outlined.Notifications.name,
                     tint = Color.White
                 )
             }
@@ -82,7 +84,7 @@ fun MyScreenTopBar(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
-                    contentDescription = "",
+                    contentDescription = Icons.Outlined.Settings.name,
                     tint = Color.White
                 )
             }
@@ -107,11 +109,11 @@ fun MyScreenContent(
                 .padding(vertical = 5.dp, horizontal = 10.dp)
         ) {
             Text(
-                text = "첫 결제시 첫 달 100원",
+                text = stringResource(R.string.first_payment_message),
                 color = Color.Gray
             )
             Text(
-                text = "구매하기",
+                text = stringResource(R.string.purchase),
                 color = Color.White
             )
         }
@@ -122,11 +124,11 @@ fun MyScreenContent(
                 .padding(vertical = 5.dp, horizontal = 10.dp)
         ) {
             Text(
-                text = "현재 보유하신 이용권이 없습니다.",
+                text = stringResource(R.string.no_subscription_message),
                 color = Color.Gray
             )
             Text(
-                text = "구매하기",
+                text = stringResource(R.string.purchase),
                 color = Color.White
             )
         }
@@ -138,7 +140,7 @@ fun MyScreenContent(
                 .fillMaxSize()
         ) {
             Text(
-                text = "전체 시청내역",
+                text = stringResource(R.string.watching_history),
                 color = Color.White
             )
             Column(
@@ -149,17 +151,17 @@ fun MyScreenContent(
                     .weight(1f)
             ) {
                 Icon(
-                    Icons.Outlined.Info,
-                    contentDescription = "",
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = Icons.Outlined.Info.name,
                     tint = Color.Gray
                 )
                 Text(
-                    text = "시청내역이 없어요.",
+                    text = stringResource(R.string.watching_history_empty),
                     color = Color.Gray
                 )
             }
             Text(
-                text = "전체 시청내역",
+                text = stringResource(R.string.favorite_programs),
                 color = Color.White
             )
             Column(
@@ -170,12 +172,12 @@ fun MyScreenContent(
                     .weight(1f)
             ) {
                 Icon(
-                    Icons.Outlined.Info,
-                    contentDescription = "",
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = Icons.Outlined.Info.name,
                     tint = Color.Gray
                 )
                 Text(
-                    text = "시청내역이 없어요.",
+                    text = stringResource(R.string.favorite_programs_empty),
                     color = Color.Gray
                 )
             }

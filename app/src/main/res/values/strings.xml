@@ -1,3 +1,38 @@
 <resources>
     <string name="app_name">AND-ANDROID</string>
+
+    // 회원가입
+    <string name="sign_up">회원가입</string>
+    <string name="sign_up_btn">Wavve 회원가입</string>
+    <string name="welcome_message">이메일과 비밀번호만으로\nWavve를 즐길 수 있어요!</string>
+    <string name="email_placeholder">Wavve@example.com</string>
+    <string name="email_info">로그인, 비밀번호 찾기, 알림에 사용되니 정확한 이메일을 입력해 주세요.</string>
+    <string name="password_placeholder">Wavve 비밀번호 설정</string>
+    <string name="password_hide">hide</string>
+    <string name="password_show">show</string>
+    <string name="password_info">비밀번호는 8 ~ 20자 이내로 영문, 대소문자, 숫자, 특수문자 중 3가지 이상 혼용하여 입력해 주세요.</string>
+    <string name="invalid_email">잘못된 이메일 형식입니다.</string>
+    <string name="invalid_password">잘못된 비밀번호 형식입니다.</string>
+
+    // 로그인
+    <string name="login_success">로그인 성공</string>
+    <string name="incorrect_password">비밀번호가 일치하지 않습니다.</string>
+    <string name="incorrect_email_or_password">이메일 또는 비밀번호가 일치하지 않습니다.</string>
+    <string name="waave">Waave</string>
+    <string name="email_or_id">이메일 주소 또는 아이디</string>
+    <string name="password">비밀번호</string>
+    <string name="login">로그인</string>
+    <string name="find_id">아이디 찾기</string>
+    <string name="pipe_character">ㅣ</string>
+    <string name="reset_password">비밀번호 재설정</string>
+
+    // MY
+    <string name="first_payment_message">첫 결제시 첫 달 100원</string>
+    <string name="no_subscription_message">현재 보유하신 이용권이 없습니다.</string>
+    <string name="purchase">구매하기</string>
+    <string name="watching_history">전체 시청내역</string>
+    <string name="watching_history_empty">시청내역이 없어요.</string>
+    <string name="favorite_programs">관심 프로그램</string>
+    <string name="favorite_programs_empty">관심 프로그램이 없어요.</string>
+
 </resources>
