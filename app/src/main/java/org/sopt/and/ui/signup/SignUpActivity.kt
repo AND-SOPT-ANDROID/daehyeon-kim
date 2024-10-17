@@ -8,7 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import org.sopt.and.R
-import org.sopt.and.ui.theme.ANDANDROIDTheme
+import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
 import org.sopt.and.util.isEmailValid
 import org.sopt.and.util.isPasswordValid
 
@@ -32,7 +32,7 @@ class SignUpActivity : ComponentActivity() {
                                     putExtra(EMAIL, email)
                                     putExtra(PASSWORD, password)
                                 }
-                                setResult(Activity.RESULT_OK, resultIntent)
+                                setResult(RESULT_OK, resultIntent)
                                 finish()
                             }
                         }

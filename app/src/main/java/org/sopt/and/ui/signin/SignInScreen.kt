@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 import org.sopt.and.R
 import org.sopt.and.model.SignInInfo
 import org.sopt.and.ui.component.textField.WaaveTextField
-import org.sopt.and.ui.theme.ANDANDROIDTheme
+import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
 
 @Composable
 fun SignInScreen(

@@ -37,7 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import org.sopt.and.R
 import org.sopt.and.ui.component.textField.WaaveTextField
 import org.sopt.and.ui.signup.component.InfoText
-import org.sopt.and.ui.theme.ANDANDROIDTheme
+import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
 import org.sopt.and.util.isButtonEnabled
 import org.sopt.and.util.isEmailValid
 import org.sopt.and.util.isPasswordValid

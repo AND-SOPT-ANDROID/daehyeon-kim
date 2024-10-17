@@ -10,7 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import org.sopt.and.R
 import org.sopt.and.ui.my.MyActivity
 import org.sopt.and.ui.signup.SignUpActivity
-import org.sopt.and.ui.theme.ANDANDROIDTheme
+import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
 
 class SignInActivity : ComponentActivity() {
 
