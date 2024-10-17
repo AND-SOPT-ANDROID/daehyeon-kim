@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.sopt.and.R
-import org.sopt.and.ui.component.textField.WaaveTextField
+import org.sopt.and.core.designsystem.component.textField.WaaveTextField
 import org.sopt.and.ui.signup.component.InfoText
 import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
 import org.sopt.and.util.isButtonEnabled
