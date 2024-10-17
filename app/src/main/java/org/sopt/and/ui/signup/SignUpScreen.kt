@@ -23,9 +23,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +33,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.sopt.and.R
 import org.sopt.and.ui.component.textField.WaaveTextField
 import org.sopt.and.ui.signup.component.InfoText
@@ -46,10 +44,12 @@ import org.sopt.and.util.isPasswordValid
 
 @Composable
 fun SignUpScreen(
+    viewModel: SignUpViewModel = viewModel(),
     onSignUpClick: (String, String) -> Unit = { _, _ ->}
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val email by viewModel.email
+    val password by viewModel.password
+    val showPassword by viewModel.showPassword
 
     Scaffold(
         topBar = { SignUpTopBar() },
@@ -64,9 +64,11 @@ fun SignUpScreen(
             SignUpContent(
                 padding = padding,
                 email = email,
-                onEmailChanged = { email = it },
+                onEmailChanged = { viewModel.onEmailChanged(it) },
                 password = password,
-                onPasswordChanged = { password = it },
+                onPasswordChanged = { viewModel.onPasswordChanged(it) },
+                showPassword = showPassword,
+                onTogglePasswordVisibility = { viewModel.togglePasswordVisibility() }
             )
         }
     )
@@ -124,14 +126,15 @@ private fun SignUpBottomBar(
 }
 
 @Composable
-fun SignUpContent(
+private fun SignUpContent(
     padding: PaddingValues,
     email: String,
     onEmailChanged: (String) -> Unit,
     password: String,
     onPasswordChanged: (String) -> Unit,
+    showPassword: Boolean,
+    onTogglePasswordVisibility: () -> Unit
 ) {
-    var showPassword by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -168,7 +171,7 @@ fun SignUpContent(
             placeholderValue = stringResource(R.string.password_placeholder),
             trailingIcon = {
                 TextButton(
-                    onClick = { showPassword = !showPassword }
+                    onClick = onTogglePasswordVisibility
                 ) {
                     Text(
                         text = if (showPassword) stringResource(R.string.password_hide) else stringResource(R.string.password_show),
