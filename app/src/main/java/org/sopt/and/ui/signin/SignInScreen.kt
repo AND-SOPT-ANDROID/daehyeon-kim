@@ -26,10 +26,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -38,6 +36,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import org.sopt.and.R
 import org.sopt.and.model.SignInInfo
@@ -46,11 +45,13 @@ import org.sopt.and.ui.theme.ANDANDROIDTheme
 
 @Composable
 fun SignInScreen(
+    viewModel: SignInViewModel = viewModel(),
     onSignInClick: (SignInInfo, snackbarMessage: (String) -> Unit) -> Unit = { _, _ -> },
     onSignUpClick: () -> Unit = {}
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val email by viewModel.email
+    val password by viewModel.password
+    val showPassword by viewModel.showPassword
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -62,9 +63,9 @@ fun SignInScreen(
         content = { innerPadding ->
             SignInContent(
                 email = email,
-                onEmailChanged = { email = it },
+                onEmailChanged = { viewModel.onEmailChanged(it) },
                 password = password,
-                onPasswordChanged = { password = it },
+                onPasswordChanged = { viewModel.onPasswordChanged(it) },
                 onSignInClick = {
                     onSignInClick(SignInInfo(email, password)) { message ->
                         scope.launch {
@@ -76,7 +77,9 @@ fun SignInScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .padding(horizontal = 15.dp, vertical = 35.dp)
+                    .padding(horizontal = 15.dp, vertical = 35.dp),
+                showPassword = showPassword,
+                onTogglePasswordVisibility = { viewModel.togglePasswordVisibility() }
             )
         }
     )
@@ -113,11 +116,10 @@ fun SignInContent(
     onPasswordChanged: (String) -> Unit,
     onSignInClick: () -> Unit = {},
     onSignUpClick: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    showPassword: Boolean,
+    onTogglePasswordVisibility: () -> Unit
 ) {
-
-    var showPassword by remember { mutableStateOf(false) }
-
     Column(
         modifier = modifier
     ) {
@@ -135,7 +137,7 @@ fun SignInContent(
             placeholderValue = stringResource(R.string.password),
             trailingIcon = {
                 TextButton(
-                    onClick = { showPassword = !showPassword }
+                    onClick = onTogglePasswordVisibility,
                 ) {
                     Text(
                         text = if (showPassword) stringResource(R.string.password_hide) else stringResource(R.string.password_show),
