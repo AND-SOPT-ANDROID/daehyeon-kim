@@ -3,7 +3,6 @@ package org.sopt.and.ui.signup
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,10 +15,14 @@ import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,41 +35,55 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.sopt.and.R
-import org.sopt.and.ui.signup.component.InfoText
 import org.sopt.and.core.designsystem.component.textfield.WaaveTextField
 import org.sopt.and.core.designsystem.component.topbar.WaaveCenterAlignedTopBar
 import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
-import org.sopt.and.util.isButtonEnabled
-import org.sopt.and.util.isEmailValid
-import org.sopt.and.util.isPasswordValid
+import org.sopt.and.model.UserInfo
+import org.sopt.and.ui.signup.component.InfoText
 
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel = viewModel(),
-    onSignUpClick: (String, String) -> Unit = { _, _ ->}
+    navigationToSignIn: (UserInfo) -> Unit = {},
 ) {
-    val email by viewModel.email
-    val password by viewModel.password
-    val showPassword by viewModel.showPassword
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val userInfo by viewModel.userInfo
+    val snackbarMessage by viewModel.snackbarMessage
+
+    if (snackbarMessage.isNotEmpty()) {
+        LaunchedEffect(snackbarHostState) {
+            snackbarHostState.showSnackbar(snackbarMessage)
+            viewModel.clearSnackbarMessage()
+        }
+    }
 
     Scaffold(
         topBar = { SignUpTopBar() },
         bottomBar = {
             SignUpBottomBar(
-                isEnabled = isButtonEnabled(email, password),
-                onSignUpClick = { onSignUpClick(email, password) }
+                userInfo = userInfo,
+                isSignUpButtonEnabled = viewModel.isSignUpButtonEnabled(),
+                onSignUpClick = {
+                    viewModel.validateAndHandleEmailPassword { validUserInfo ->
+                        navigationToSignIn(validUserInfo)
+                    }
+                }
             )
         },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = Color.Black,
         content = { padding ->
             SignUpContent(
-                padding = padding,
-                email = email,
+                modifier = Modifier.padding(padding),
+                email = userInfo.email,
                 onEmailChanged = { viewModel.onEmailChanged(it) },
-                password = password,
+                password = userInfo.password,
                 onPasswordChanged = { viewModel.onPasswordChanged(it) },
-                showPassword = showPassword,
-                onTogglePasswordVisibility = { viewModel.togglePasswordVisibility() }
+                showPassword = viewModel.showPassword.value,
+                onTogglePasswordVisibility = { viewModel.togglePasswordVisibility() },
+                isEmailValid = viewModel.isEmailValid.value,
+                isPasswordValid = viewModel.isPasswordValid.value
             )
         }
     )
@@ -92,11 +109,12 @@ private fun SignUpTopBar() {
 
 @Composable
 private fun SignUpBottomBar(
-    isEnabled: Boolean,
-    onSignUpClick: () -> Unit = {}
+    userInfo: UserInfo,
+    isSignUpButtonEnabled: Boolean,
+    onSignUpClick: (UserInfo) -> Unit = {}
 ) {
     BottomAppBar(
-        containerColor = if (isEnabled) Color.Blue else Color.Gray,
+        containerColor = if (isSignUpButtonEnabled) Color.Blue else Color.Gray,
         windowInsets = BottomAppBarDefaults.windowInsets,
         modifier = Modifier.height(60.dp)
     ) {
@@ -105,7 +123,9 @@ private fun SignUpBottomBar(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .clickable(enabled = isEnabled) { onSignUpClick() }
+                .clickable(enabled = isSignUpButtonEnabled) {
+                    onSignUpClick(userInfo)
+                }
         ) {
             Text(
                 text = stringResource(R.string.sign_up_btn),
@@ -117,19 +137,19 @@ private fun SignUpBottomBar(
 
 @Composable
 private fun SignUpContent(
-    padding: PaddingValues,
+    modifier: Modifier,
     email: String,
     onEmailChanged: (String) -> Unit,
     password: String,
     onPasswordChanged: (String) -> Unit,
     showPassword: Boolean,
-    onTogglePasswordVisibility: () -> Unit
+    onTogglePasswordVisibility: () -> Unit,
+    isEmailValid: Boolean,
+    isPasswordValid: Boolean
 ) {
-
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(padding)
             .padding(vertical = 15.dp, horizontal = 25.dp)
     ) {
         Text(
@@ -146,7 +166,7 @@ private fun SignUpContent(
             value = email,
             onValueChange = onEmailChanged,
             placeholderValue = stringResource(R.string.email_placeholder),
-            isError = email.isNotEmpty() && !isEmailValid(email)
+            isError = !isEmailValid
         )
 
         Spacer(modifier = Modifier.padding(5.dp))
@@ -169,7 +189,7 @@ private fun SignUpContent(
                     )
                 }
             },
-            isError = password.isNotEmpty() && !isPasswordValid(password),
+            isError = !isPasswordValid,
             visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation()
         )
 
