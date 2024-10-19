@@ -40,7 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import org.sopt.and.R
 import org.sopt.and.model.SignInInfo
-import org.sopt.and.core.designsystem.component.textField.WaaveTextField
+import org.sopt.and.core.designsystem.component.textfield.WaaveTextField
 import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
 
 @Composable
