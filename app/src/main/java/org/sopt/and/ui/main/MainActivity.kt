@@ -12,6 +12,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ANDANDROIDTheme {
+                MainScreen()
             }
         }
     }
