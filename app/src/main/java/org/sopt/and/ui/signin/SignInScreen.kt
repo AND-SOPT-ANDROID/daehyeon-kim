@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
@@ -22,9 +23,9 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -34,50 +35,52 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.launch
 import org.sopt.and.R
-import org.sopt.and.model.SignInInfo
 import org.sopt.and.core.designsystem.component.textfield.WaaveTextField
 import org.sopt.and.core.designsystem.component.topbar.WaaveCenterAlignedTopBar
 import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
+import org.sopt.and.model.UserInfo
 
 @Composable
 fun SignInScreen(
     viewModel: SignInViewModel = viewModel(),
-    onSignInClick: (SignInInfo, snackbarMessage: (String) -> Unit) -> Unit = { _, _ -> },
-    onSignUpClick: () -> Unit = {}
+    userInfo: UserInfo,
+    navigationToMy: (email: String) -> Unit = {},
+    navigationToSignUp: () -> Unit = {},
 ) {
-    val email by viewModel.email
-    val password by viewModel.password
-    val showPassword by viewModel.showPassword
-
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarMessage by viewModel.snackbarMessage
+    val userEnteredInfo by viewModel.userEnteredInfo
+
+    if (snackbarMessage.isNotEmpty()) {
+        LaunchedEffect(snackbarHostState) {
+            snackbarHostState.showSnackbar(snackbarMessage)
+            viewModel.clearSnackbarMessage()
+        }
+    }
 
     Scaffold(
+        modifier = Modifier.imePadding(),
         topBar = { SignInTopBar() },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = Color.Black,
         content = { innerPadding ->
             SignInContent(
-                email = email,
+                modifier = Modifier.padding(innerPadding),
+                userInfo = userInfo,
+                email = userEnteredInfo.email,
                 onEmailChanged = { viewModel.onEmailChanged(it) },
-                password = password,
+                password = userEnteredInfo.password,
                 onPasswordChanged = { viewModel.onPasswordChanged(it) },
-                onSignInClick = {
-                    onSignInClick(SignInInfo(email, password)) { message ->
-                        scope.launch {
-                            snackbarHostState.showSnackbar(message)
-                        }
-                    }
+                showPassword = viewModel.showPassword.value,
+                onTogglePasswordVisibility = { viewModel.togglePasswordVisibility() },
+                onSignUpClick = navigationToSignUp,
+                onSignInClick = { userInfo ->
+                    viewModel.validateSignInCredentials(
+                        userInfo,
+                        onLoginSuccess = navigationToMy
+                    )
                 },
-                onSignUpClick = onSignUpClick,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = 15.dp, vertical = 35.dp),
-                showPassword = showPassword,
-                onTogglePasswordVisibility = { viewModel.togglePasswordVisibility() }
             )
         }
     )
@@ -100,19 +103,22 @@ private fun SignInTopBar() {
 }
 
 @Composable
-fun SignInContent(
+private fun SignInContent(
+    modifier: Modifier,
+    userInfo: UserInfo,
     email: String,
     onEmailChanged: (String) -> Unit,
     password: String,
     onPasswordChanged: (String) -> Unit,
-    onSignInClick: () -> Unit = {},
-    onSignUpClick: () -> Unit,
-    modifier: Modifier,
     showPassword: Boolean,
-    onTogglePasswordVisibility: () -> Unit
+    onTogglePasswordVisibility: () -> Unit,
+    onSignUpClick: () -> Unit,
+    onSignInClick: (UserInfo) -> Unit,
 ) {
     Column(
         modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 15.dp, vertical = 35.dp)
     ) {
         WaaveTextField(
             value = email,
@@ -142,7 +148,7 @@ fun SignInContent(
         Spacer(modifier = Modifier.height(30.dp))
 
         Button(
-            onClick = onSignInClick,
+            onClick = { onSignInClick(userInfo) },
             colors = ButtonDefaults.buttonColors(Color.Blue),
             modifier = Modifier
                 .fillMaxWidth()
@@ -191,6 +197,8 @@ fun SignInContent(
 @Composable
 private fun PreViewSignInScreen() {
     ANDANDROIDTheme {
-        SignInScreen()
+        SignInScreen(
+            userInfo = UserInfo()
+        )
     }
 }
