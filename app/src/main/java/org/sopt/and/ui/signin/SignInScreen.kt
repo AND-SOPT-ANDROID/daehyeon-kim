@@ -14,8 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -23,7 +21,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -41,6 +38,7 @@ import kotlinx.coroutines.launch
 import org.sopt.and.R
 import org.sopt.and.model.SignInInfo
 import org.sopt.and.core.designsystem.component.textfield.WaaveTextField
+import org.sopt.and.core.designsystem.component.topbar.WaaveCenterAlignedTopBar
 import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
 
 @Composable
@@ -85,16 +83,10 @@ fun SignInScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInTopBar() {
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = stringResource(R.string.waave),
-                color = Color.White
-            )
-        },
+private fun SignInTopBar() {
+    WaaveCenterAlignedTopBar(
+        titleText = stringResource(R.string.waave),
         navigationIcon = {
             IconButton(onClick = {}) {
                 Icon(
@@ -104,7 +96,6 @@ fun SignInTopBar() {
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(Color.Black)
     )
 }
 
