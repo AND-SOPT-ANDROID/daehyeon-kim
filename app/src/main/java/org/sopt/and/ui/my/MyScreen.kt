@@ -32,9 +32,9 @@ import org.sopt.and.R
 import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
 
 @Composable
-fun MyScreen(
-    userName: String = ""
-) {
+fun MyScreen() {
+    val userName: String = "username"
+
     Scaffold(
         topBar = { MyScreenTopBar(userName) },
         containerColor = Color.Black,
@@ -189,8 +189,6 @@ fun MyScreenContent(
 @Composable
 private fun PreviewMyScreen() {
     ANDANDROIDTheme {
-        MyScreen(
-            userName = "name"
-        )
+        MyScreen()
     }
 }

@@ -45,7 +45,7 @@ import org.sopt.and.model.UserInfo
 fun SignInScreen(
     viewModel: SignInViewModel = viewModel(),
     userInfo: UserInfo,
-    navigationToMy: (email: String) -> Unit = {},
+    navigationToHome: () -> Unit = {},
     navigationToSignUp: () -> Unit = {},
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -78,7 +78,7 @@ fun SignInScreen(
                 onSignInClick = { userInfo ->
                     viewModel.validateSignInCredentials(
                         userInfo,
-                        onLoginSuccess = navigationToMy
+                        onLoginSuccess = navigationToHome
                     )
                 },
             )

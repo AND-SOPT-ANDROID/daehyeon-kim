@@ -30,8 +30,11 @@ import org.sopt.and.ui.hoem.component.SubVideoContent
 import org.sopt.and.ui.hoem.component.Top20VideoContent
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    padding: PaddingValues
+) {
     Scaffold(
+        modifier = Modifier.padding(padding),
         topBar = { HomeTopAppBar() },
         containerColor = Color.Black,
         content = { innerPadding ->
@@ -118,17 +121,23 @@ private fun HomeContent(
                 imageList = imageList,
                 pagerState = pagerState
             )
+        }
 
+        item {
             SubVideoContent(
                 contentTitle = "믿고 보는 웨이브 에디터 추천작",
                 imageList = imageList
             )
+        }
 
+        item {
             Top20VideoContent(
                 contentTitle = "오늘의 TOP 20",
                 imageList = imageList
             )
+        }
 
+        item {
             SubVideoContent(
                 contentTitle = "실시간 인기 콘텐츠",
                 imageList = imageList
@@ -155,5 +164,7 @@ fun HomeTextButton(
 @Preview
 @Composable
 private fun PreviewHomeScreen() {
-    HomeScreen()
+    HomeScreen(
+        padding = PaddingValues()
+    )
 }

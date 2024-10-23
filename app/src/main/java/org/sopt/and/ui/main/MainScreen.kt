@@ -1,55 +1,86 @@
 package org.sopt.and.ui.main
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
-import org.sopt.and.core.navigation.My
-import org.sopt.and.core.navigation.SignIn
-import org.sopt.and.core.navigation.SignUp
-import org.sopt.and.model.UserInfo
+import org.sopt.and.core.navigation.MainTabRoute
+import org.sopt.and.ui.hoem.HomeScreen
+import org.sopt.and.ui.hoem.navigation.homeNavGraph
+import org.sopt.and.ui.main.component.MainBottomTabsBar
 import org.sopt.and.ui.my.MyScreen
-import org.sopt.and.ui.signin.SignInScreen
-import org.sopt.and.ui.signup.SignUpScreen
+import org.sopt.and.ui.my.navigation.myNavGraph
+import org.sopt.and.ui.search.SearchScreen
+import org.sopt.and.ui.search.navigation.searchNavGraph
+import org.sopt.and.ui.signin.navigation.signInNavGraph
+import org.sopt.and.ui.signup.navigation.signUpNavGraph
 
 @Composable
 fun MainScreen() {
-    MainContent()
+    val navigator = rememberMainNavigator()
+
+    Scaffold(
+        bottomBar = {
+            AnimatedVisibility(
+                visible = navigator.shouldShowBottomBar(),
+                enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
+                exit = fadeOut() + slideOutVertically(targetOffsetY = { it })
+            ) {
+                MainBottomTabsBar(
+                    mainTabs = MainTab.entries,
+                    currentBottomTab = navigator.currentTab,
+                    onTabClicked = { tab -> navigator.navigateMainTab(tab) }
+                )
+            }
+        },
+        contentWindowInsets = ScaffoldDefaults.contentWindowInsets,
+        containerColor = Color.Black,
+        content = { innerPadding ->
+            MainContent(
+                padding = innerPadding,
+                navigator = navigator
+            )
+        }
+    )
 }
 
 @Composable
-private fun MainContent() {
-    val navController = rememberNavController()
-
-    NavHost(
-        navController = navController,
-        startDestination = SignUp
+private fun MainContent(
+    padding: PaddingValues,
+    navigator: MainNavigator
+) {
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        composable<SignUp> {
-            SignUpScreen(
-                navigationToSignIn = { userInfo ->
-                    navController.navigate(SignIn(userInfo.email, userInfo.password)) {
-                        popUpTo(SignUp) { inclusive = true }
-                    }
-                }
+        NavHost(
+            navController = navigator.navController,
+            startDestination = navigator.startDestination
+        ) {
+            signInNavGraph(
+                navigationToSignUp = { navigator.navigationToSignUp() },
+                navigationToHome = { navigator.navigationToHome() }
             )
-        }
 
-        composable<SignIn> { backStackEntry ->
-            val item = backStackEntry.toRoute<SignIn>()
-            SignInScreen(
-                userInfo = UserInfo(item.email, item.password),
-                navigationToSignUp = { navController.navigate(SignUp)},
-                navigationToMy = { email ->
-                    navController.navigate(My(email))
-                }
+            signUpNavGraph(
+                navigationToSignIn = { userInfo -> navigator.navigationToSignIn(userInfo) }
             )
-        }
 
-        composable<My> { backStackEntry ->
-            val item = backStackEntry.toRoute<My>()
-            MyScreen(userName = item.email)
+            homeNavGraph(padding)
+            myNavGraph()
+            searchNavGraph()
         }
     }
 }
