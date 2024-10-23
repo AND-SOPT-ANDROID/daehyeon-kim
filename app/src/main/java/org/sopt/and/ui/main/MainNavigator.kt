@@ -12,7 +12,7 @@ import androidx.navigation.navOptions
 import org.sopt.and.core.navigation.MainTabRoute
 import org.sopt.and.core.navigation.Route
 import org.sopt.and.model.UserInfo
-import org.sopt.and.ui.hoem.navigation.navigateToHome
+import org.sopt.and.ui.home.navigation.navigateToHome
 import org.sopt.and.ui.my.navigation.navigateToMy
 import org.sopt.and.ui.search.navigation.navigateToSearch
 

@@ -1,4 +1,4 @@
-package org.sopt.and.ui.hoem.component
+package org.sopt.and.ui.home.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

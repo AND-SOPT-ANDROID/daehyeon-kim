@@ -1,4 +1,4 @@
-package org.sopt.and.ui.hoem
+package org.sopt.and.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,9 +25,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.and.R
-import org.sopt.and.ui.hoem.component.MainVideoContent
-import org.sopt.and.ui.hoem.component.SubVideoContent
-import org.sopt.and.ui.hoem.component.Top20VideoContent
+import org.sopt.and.ui.home.component.MainVideoContent
+import org.sopt.and.ui.home.component.SubVideoContent
+import org.sopt.and.ui.home.component.Top20VideoContent
 
 @Composable
 fun HomeScreen(
