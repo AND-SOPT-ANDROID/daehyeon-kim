@@ -26,30 +26,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.and.R
+import org.sopt.and.model.Video
 
 @Composable
 fun MainVideoContent(
-    imageList: List<Int>,
-    pagerState: PagerState,
+    mainVideoList: List<Video>,
     modifier: Modifier = Modifier
 ) {
+    val pagerState = rememberPagerState(pageCount = { mainVideoList.size })
+
     Column(
         modifier = modifier
             .padding(vertical = 15.dp)
-            .height(500.dp)
+            .height(450.dp)
     ) {
         HorizontalPager(
             state = pagerState,
             contentPadding = PaddingValues(horizontal = 20.dp),
             pageSpacing = 10.dp,
-        ) { page ->
-
+        ) { index ->
             Surface(
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxSize(),
             ) {
                 Image(
-                    painter = painterResource(imageList[page]),
+                    painter = painterResource(mainVideoList[index].image),
                     contentDescription = "",
                     contentScale = ContentScale.Crop
                 )
@@ -91,18 +92,13 @@ fun MainVideoContent(
 @Composable
 private fun PreView() {
     val imageList = listOf(
-        R.drawable.image1,
-        R.drawable.image2,
-        R.drawable.image3,
-        R.drawable.image4,
-        R.drawable.image5,
-        R.drawable.image6,
+        Video(videoId = 1, image = R.drawable.image1),
+        Video(videoId = 2, image = R.drawable.image2),
+        Video(videoId = 3, image = R.drawable.image3),
+        Video(videoId = 4, image = R.drawable.image4),
+        Video(videoId = 5, image = R.drawable.image5),
+        Video(videoId = 6, image = R.drawable.image6),
     )
-    val pagerState = rememberPagerState(
-        pageCount = { imageList.size }
-    )
-    MainVideoContent(
-        imageList = imageList,
-        pagerState = pagerState
-    )
+
+    MainVideoContent(mainVideoList = imageList,)
 }

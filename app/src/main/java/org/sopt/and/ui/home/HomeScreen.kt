@@ -1,6 +1,5 @@
 package org.sopt.and.ui.home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material.icons.filled.LiveTv
@@ -24,27 +23,42 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.and.R
+import androidx.lifecycle.viewmodel.compose.viewModel
+import org.sopt.and.model.Top20Video
+import org.sopt.and.model.Video
+import org.sopt.and.ui.home.component.HomeTextButton
 import org.sopt.and.ui.home.component.MainVideoContent
 import org.sopt.and.ui.home.component.SubVideoContent
 import org.sopt.and.ui.home.component.Top20VideoContent
 
 @Composable
 fun HomeScreen(
-    padding: PaddingValues
+    padding: PaddingValues,
+    viewModel: HomeViewModel = viewModel()
 ) {
+    val mainVideoList = viewModel.mainVideoList
+    val subVideoList = viewModel.subVideoList
+    val top20VideoList = viewModel.top20VideoList
+
     Scaffold(
         modifier = Modifier.padding(padding),
         topBar = { HomeTopAppBar() },
         containerColor = Color.Black,
         content = { innerPadding ->
-            HomeContent(modifier = Modifier.padding(innerPadding))
+            HomeContent(
+                modifier = Modifier.padding(innerPadding),
+                mainVideoList = mainVideoList,
+                subVideoList = subVideoList,
+                top20VideoList = top20VideoList
+            )
         }
     )
 }
 
 @Composable
 fun HomeTopAppBar() {
+    val categories = listOf("뉴클래식", "드라마", "예능", "영화", "애니", "해외시리즈", "시사교양", "키즈")
+
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier.padding(vertical = 10.dp)
@@ -81,90 +95,50 @@ fun HomeTopAppBar() {
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 15.dp)
         ) {
-            item {
-                HomeTextButton("뉴클래식")
-                HomeTextButton("드라마")
-                HomeTextButton("예능")
-                HomeTextButton("영화")
-                HomeTextButton("애니")
-                HomeTextButton("해외시리즈")
-                HomeTextButton("시사교양")
-                HomeTextButton("키즈")
-            }
+             items(categories) { categories ->
+                 HomeTextButton(text = categories, onClick = {})
+             }
         }
     }
 }
 
 @Composable
 private fun HomeContent(
-    modifier: Modifier
+    modifier: Modifier,
+    mainVideoList: List<Video>,
+    subVideoList: List<Video>,
+    top20VideoList: List<Top20Video>
 ) {
-
-    val imageList = listOf(
-        R.drawable.image1,
-        R.drawable.image2,
-        R.drawable.image3,
-        R.drawable.image4,
-        R.drawable.image5,
-        R.drawable.image6,
-    )
-
-    val pagerState = rememberPagerState(
-        pageCount = { imageList.size }
-    )
-
     LazyColumn(
         modifier = modifier.fillMaxSize()
     ) {
-        item {
-            MainVideoContent(
-                imageList = imageList,
-                pagerState = pagerState
-            )
-        }
+        item { MainVideoContent(mainVideoList = mainVideoList) }
 
         item {
             SubVideoContent(
                 contentTitle = "믿고 보는 웨이브 에디터 추천작",
-                imageList = imageList
+                subVideos = subVideoList
             )
         }
 
         item {
             Top20VideoContent(
                 contentTitle = "오늘의 TOP 20",
-                imageList = imageList
+                top20Videos = top20VideoList
             )
         }
 
         item {
             SubVideoContent(
                 contentTitle = "실시간 인기 콘텐츠",
-                imageList = imageList
+                subVideos = subVideoList
             )
         }
     }
 }
 
-@Composable
-fun HomeTextButton(
-    text: String,
-    onClick: () -> Unit = {}
-) {
-    Text(
-        text = text,
-        fontSize = 15.sp,
-        color = Color.Gray,
-        modifier = Modifier
-            .padding(horizontal = 6.dp)
-            .clickable { onClick() }
-    )
-}
-
 @Preview
 @Composable
 private fun PreviewHomeScreen() {
-    HomeScreen(
-        padding = PaddingValues()
-    )
+    HomeScreen(padding = PaddingValues())
 }

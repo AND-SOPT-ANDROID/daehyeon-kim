@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
@@ -26,11 +27,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.and.R
+import org.sopt.and.model.Video
 
 @Composable
 fun SubVideoContent(
     contentTitle: String,
-    imageList: List<Int>,
+    subVideos: List<Video>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -59,13 +61,16 @@ fun SubVideoContent(
             contentPadding = PaddingValues(horizontal = 10.dp),
             modifier = Modifier.height(150.dp)
         ) {
-            items(imageList.size) { index ->
+            items(
+                items = subVideos,
+                key = { item -> item.videoId }
+            ) { subVideo ->
                 Surface(
                     modifier = Modifier.padding(horizontal = 5.dp),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Image(
-                        painter = painterResource(imageList[index]),
+                        painter = painterResource(subVideo.image),
                         contentDescription = "",
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
@@ -79,17 +84,17 @@ fun SubVideoContent(
 @Preview
 @Composable
 private fun PreviewVideoContent() {
-    val imageList = listOf(
-        R.drawable.image1,
-        R.drawable.image2,
-        R.drawable.image3,
-        R.drawable.image4,
-        R.drawable.image5,
-        R.drawable.image6,
+    val subVideos = listOf(
+        Video(videoId = 1, image = R.drawable.image1),
+        Video(videoId = 2, image = R.drawable.image2),
+        Video(videoId = 3, image = R.drawable.image3),
+        Video(videoId = 4, image = R.drawable.image4),
+        Video(videoId = 5, image = R.drawable.image5),
+        Video(videoId = 6, image = R.drawable.image6),
     )
 
     SubVideoContent(
         contentTitle = "믿고 보는 웨이브 에디터 추천작",
-        imageList = imageList
+        subVideos = subVideos
     )
 }

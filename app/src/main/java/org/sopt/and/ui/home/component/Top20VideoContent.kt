@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,11 +28,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.and.R
+import org.sopt.and.model.Top20Video
 
 @Composable
 fun Top20VideoContent(
     contentTitle: String,
-    imageList: List<Int>,
+    top20Videos: List<Top20Video>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -55,7 +57,10 @@ fun Top20VideoContent(
             contentPadding = PaddingValues(horizontal = 10.dp),
             modifier = Modifier.height(250.dp)
         ) {
-            items(imageList.size) { index ->
+            items(
+                items = top20Videos,
+                key = { item: Top20Video -> item.videoId }
+            ) { top20Videos ->
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.BottomStart
@@ -68,7 +73,7 @@ fun Top20VideoContent(
                                 .padding(horizontal = 5.dp)
                         ) {
                             Image(
-                                painter = painterResource(imageList[index]),
+                                painter = painterResource(top20Videos.image),
                                 contentDescription = "",
                                 contentScale = ContentScale.Crop
                             )
@@ -76,7 +81,7 @@ fun Top20VideoContent(
                         Spacer(modifier = Modifier.weight(0.15f))
                     }
                     Text(
-                        text = "${index+1}",
+                        text = "${top20Videos.rank}",
                         modifier = Modifier.padding(start = 5.dp),
                         fontSize = 60.sp,
                         fontStyle = FontStyle.Italic,
@@ -92,30 +97,30 @@ fun Top20VideoContent(
 @Preview
 @Composable
 private fun Preview() {
-    val imageList = listOf(
-        R.drawable.image1,
-        R.drawable.image2,
-        R.drawable.image3,
-        R.drawable.image4,
-        R.drawable.image5,
-        R.drawable.image6,
-        R.drawable.image1,
-        R.drawable.image2,
-        R.drawable.image3,
-        R.drawable.image4,
-        R.drawable.image5,
-        R.drawable.image6,
-        R.drawable.image1,
-        R.drawable.image2,
-        R.drawable.image3,
-        R.drawable.image4,
-        R.drawable.image5,
-        R.drawable.image6,
-        R.drawable.image1,
-        R.drawable.image2,
+    val top20Videos = listOf(
+        Top20Video(videoId = 1, rank = 1, image = R.drawable.image1),
+        Top20Video(videoId = 2, rank = 2, image = R.drawable.image2),
+        Top20Video(videoId = 3, rank = 3, image = R.drawable.image3),
+        Top20Video(videoId = 4, rank = 4, image = R.drawable.image4),
+        Top20Video(videoId = 5, rank = 5, image = R.drawable.image5),
+        Top20Video(videoId = 6, rank = 6, image = R.drawable.image6),
+        Top20Video(videoId = 7, rank = 7, image = R.drawable.image1),
+        Top20Video(videoId = 8, rank = 8, image = R.drawable.image2),
+        Top20Video(videoId = 9, rank = 9, image = R.drawable.image3),
+        Top20Video(videoId = 10, rank = 10, image = R.drawable.image4),
+        Top20Video(videoId = 11, rank = 11, image = R.drawable.image5),
+        Top20Video(videoId = 12, rank = 12, image = R.drawable.image6),
+        Top20Video(videoId = 13, rank = 13, image = R.drawable.image1),
+        Top20Video(videoId = 14, rank = 14, image = R.drawable.image2),
+        Top20Video(videoId = 15, rank = 15, image = R.drawable.image3),
+        Top20Video(videoId = 16, rank = 16, image = R.drawable.image4),
+        Top20Video(videoId = 17, rank = 17, image = R.drawable.image5),
+        Top20Video(videoId = 18, rank = 18, image = R.drawable.image6),
+        Top20Video(videoId = 19, rank = 19, image = R.drawable.image1),
+        Top20Video(videoId = 20, rank = 20, image = R.drawable.image2),
     )
     Top20VideoContent(
         contentTitle = "오늘의 Top 20",
-        imageList = imageList
+        top20Videos = top20Videos
     )
 }
