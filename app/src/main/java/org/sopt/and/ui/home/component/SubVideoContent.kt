@@ -37,13 +37,13 @@ fun SubVideoContent(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(5.dp),
-        modifier = Modifier.padding(bottom = 20.dp)
+        modifier = Modifier.padding(vertical = 15.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = modifier
                 .fillMaxWidth()
-                .padding(vertical = 5.dp, horizontal = 15.dp)
+                .padding(horizontal = 15.dp)
         ) {
             Text(
                 text = contentTitle,

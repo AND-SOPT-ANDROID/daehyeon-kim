@@ -1,15 +1,11 @@
 package org.sopt.and.ui.main
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
@@ -29,11 +25,7 @@ fun MainScreen() {
 
     Scaffold(
         bottomBar = {
-            AnimatedVisibility(
-                visible = navigator.shouldShowBottomBar(),
-                enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
-                exit = fadeOut() + slideOutVertically(targetOffsetY = { it })
-            ) {
+            if (navigator.shouldShowBottomBar()) {
                 MainBottomTabsBar(
                     mainTabs = MainTab.entries,
                     currentBottomTab = navigator.currentTab,
@@ -57,8 +49,10 @@ private fun MainContent(
     padding: PaddingValues,
     navigator: MainNavigator
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize()
+    Box (
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
     ) {
         NavHost(
             navController = navigator.navController,
@@ -85,7 +79,7 @@ private fun MainContent(
                 navigationToSignIn = { userInfo -> navigator.navigationToSignIn(userInfo) }
             )
 
-            homeNavGraph(padding)
+            homeNavGraph()
             myNavGraph()
             searchNavGraph()
         }

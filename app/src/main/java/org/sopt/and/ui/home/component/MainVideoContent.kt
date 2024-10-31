@@ -49,7 +49,6 @@ fun MainVideoContent(
 
     Column(
         modifier = modifier
-            .padding(vertical = 15.dp)
             .height(450.dp)
     ) {
         HorizontalPager(
