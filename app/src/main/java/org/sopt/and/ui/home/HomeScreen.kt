@@ -1,11 +1,12 @@
 package org.sopt.and.ui.home
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -13,11 +14,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material.icons.filled.LiveTv
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,75 +36,57 @@ import org.sopt.and.ui.home.component.Top20VideoContent
 
 @Composable
 fun HomeScreen(
-    padding: PaddingValues,
     viewModel: HomeViewModel = viewModel()
 ) {
     val mainVideoList = viewModel.mainVideoList
     val subVideoList = viewModel.subVideoList
     val top20VideoList = viewModel.top20VideoList
 
-    Scaffold(
-        modifier = Modifier.padding(padding),
-        topBar = { HomeTopAppBar() },
-        containerColor = Color.Black,
-        content = { innerPadding ->
-            HomeContent(
-                modifier = Modifier.padding(innerPadding),
-                mainVideoList = mainVideoList,
-                subVideoList = subVideoList,
-                top20VideoList = top20VideoList
-            )
-        }
+    HomeContent(
+        modifier = Modifier.padding(),
+        mainVideoList = mainVideoList,
+        subVideoList = subVideoList,
+        top20VideoList = top20VideoList
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopAppBar() {
-    val categories = listOf("뉴클래식", "드라마", "예능", "영화", "애니", "해외시리즈", "시사교양", "키즈")
-
-    Column(
-        verticalArrangement = Arrangement.spacedBy(15.dp),
-        modifier = Modifier.padding(vertical = 10.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp)
-        ) {
+private fun HomeTopAppBar() {
+    TopAppBar(
+        title = {
             Text(
                 text = "Waave",
                 color = Color.White,
                 fontSize = 25.sp
             )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(18.dp),
-                verticalAlignment = Alignment.CenterVertically,
+        },
+        actions = {
+            IconButton(
+                onClick = {}
             ) {
                 Icon(
                     imageVector = Icons.Default.Cast,
                     contentDescription = Icons.Default.Cast.name,
-                    tint = Color.White
+                    tint = Color.White,
                 )
+            }
+            IconButton(
+                onClick = {}
+            ) {
                 Icon(
                     imageVector = Icons.Default.LiveTv,
                     contentDescription = Icons.Default.Cast.name,
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
-        }
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 15.dp)
-        ) {
-             items(categories) { categories ->
-                 HomeTextButton(text = categories, onClick = {})
-             }
-        }
-    }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(Color.Black),
+        windowInsets = TopAppBarDefaults.windowInsets,
+    )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HomeContent(
     modifier: Modifier,
@@ -109,9 +94,32 @@ private fun HomeContent(
     subVideoList: List<Video>,
     top20VideoList: List<Top20Video>
 ) {
+
     LazyColumn(
         modifier = modifier.fillMaxSize()
     ) {
+
+        item {
+            HomeTopAppBar()
+        }
+
+        stickyHeader {
+            val categories = listOf("뉴클래식", "드라마", "예능", "영화", "애니", "해외시리즈", "시사교양", "키즈")
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Black),
+                contentPadding = PaddingValues(
+                    vertical = 10.dp,
+                    horizontal = 15.dp,
+                )
+            ) {
+                items(categories) { categories ->
+                    HomeTextButton(text = categories, onClick = {})
+                }
+            }
+        }
+
         item { MainVideoContent(mainVideoList = mainVideoList) }
 
         item {
@@ -134,11 +142,15 @@ private fun HomeContent(
                 subVideos = subVideoList
             )
         }
+
+        item {
+            Spacer(modifier = Modifier.height(120.dp))
+        }
     }
 }
 
 @Preview
 @Composable
 private fun PreviewHomeScreen() {
-    HomeScreen(padding = PaddingValues())
+    HomeScreen()
 }
