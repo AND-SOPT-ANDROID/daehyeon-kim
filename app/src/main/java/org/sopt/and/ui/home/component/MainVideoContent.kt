@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -56,43 +57,43 @@ fun MainVideoContent(
             contentPadding = PaddingValues(horizontal = 20.dp),
             pageSpacing = 10.dp,
         ) { index ->
-            Surface(
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.fillMaxSize(),
+            Box(
+                contentAlignment = Alignment.BottomEnd
             ) {
                 Image(
                     painter = painterResource(mainVideoList[index].image),
                     contentDescription = "",
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(
+                            RoundedCornerShape(10.dp)
+                        ),
                 )
-                Box(
-                    contentAlignment = Alignment.BottomEnd
+                Surface(
+                    color = Color.Black,
+                    shape = RoundedCornerShape(15.dp),
+                    modifier = Modifier.padding(16.dp)
                 ) {
-                    Surface(
-                        color = Color.Black,
-                        shape = RoundedCornerShape(15.dp),
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = buildAnnotatedString {
-                                withStyle(style = SpanStyle(color = Color.White)) {
-                                    append("${pagerState.currentPage + 1}")
-                                }
-                                withStyle(
-                                    style = SpanStyle(
-                                        color = Color.Gray,
-                                        letterSpacing = 4.sp
-                                    )
-                                ) {
-                                    append("|")
-                                }
-                                withStyle(style = SpanStyle(color = Color.Gray)) {
-                                    append("${pagerState.pageCount}")
-                                }
-                            },
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-                        )
-                    }
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(color = Color.White)) {
+                                append("${pagerState.currentPage + 1}")
+                            }
+                            withStyle(
+                                style = SpanStyle(
+                                    color = Color.Gray,
+                                    letterSpacing = 4.sp
+                                )
+                            ) {
+                                append("|")
+                            }
+                            withStyle(style = SpanStyle(color = Color.Gray)) {
+                                append("${pagerState.pageCount}")
+                            }
+                        },
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                    )
                 }
             }
         }
@@ -111,5 +112,5 @@ private fun PreView() {
         Video(videoId = 6, image = R.drawable.image6),
     )
 
-    MainVideoContent(mainVideoList = imageList,)
+    MainVideoContent(mainVideoList = imageList)
 }

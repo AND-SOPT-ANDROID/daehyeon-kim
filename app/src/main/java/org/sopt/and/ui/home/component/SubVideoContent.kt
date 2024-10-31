@@ -15,10 +15,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -65,17 +65,17 @@ fun SubVideoContent(
                 items = subVideos,
                 key = { item -> item.videoId }
             ) { subVideo ->
-                Surface(
-                    modifier = Modifier.padding(horizontal = 5.dp),
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    Image(
-                        painter = painterResource(subVideo.image),
-                        contentDescription = "",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
+                Image(
+                    painter = painterResource(subVideo.image),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(
+                            RoundedCornerShape(10.dp)
+                        )
+                        .padding(horizontal = 5.dp),
+                    contentScale = ContentScale.Crop
+                )
             }
         }
     }

@@ -14,11 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -66,18 +66,18 @@ fun Top20VideoContent(
                     contentAlignment = Alignment.BottomStart
                 ) {
                     Column {
-                        Surface(
-                            shape = RoundedCornerShape(10.dp),
+                        Image(
+                            painter = painterResource(top20Videos.image),
+                            contentDescription = "",
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(horizontal = 5.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(top20Videos.image),
-                                contentDescription = "",
-                                contentScale = ContentScale.Crop
-                            )
-                        }
+                                .clip(
+                                    RoundedCornerShape(10.dp)
+                                )
+                            ,
+                            contentScale = ContentScale.Crop
+                        )
                         Spacer(modifier = Modifier.weight(0.15f))
                     }
                     Text(
