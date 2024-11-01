@@ -5,7 +5,6 @@
 - [x] 지금까지 과제로 진행한 뷰에 대해서 실습 때 진행한 플로우를 바탕으로 컴포넌트화 및 UI단 설계를 진행해주세요.
 - (홈, MY, 로그인, 회원가입 필수 검색 선택)
 
-
 | 회원가입                                                                                                                  | 로그인                                                                                                                  | 홈                                                                                                                  | MY                                                                                                                  |
 |:----------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------|
 | <img src="https://github.com/user-attachments/assets/843c8ea9-e6ee-4e99-9462-16533232f9aa" alt="회원가입 화면" width="250"> | <img src="https://github.com/user-attachments/assets/7d058ee8-d3db-459c-98c2-99b7c132d879" alt="로그인 화면" width="250"> | <img src="https://github.com/user-attachments/assets/5df0a20f-6e12-4b07-82b5-695dba6eb5ee" alt="홈 화면" width="250"> | <img src="https://github.com/user-attachments/assets/e6b323b0-462f-41ff-8b81-c153a52208ef" alt="MY 화면" width="250"> |
@@ -47,16 +46,19 @@
 - 오류메시지 출력 부분 (snackbar)
 
 ```kotlin
-fun ScaffoldState.showSnackbar(
-    scope: CoroutineScope,
+@Composable
+fun Modifier.showSnackbarEffect(
     message: String,
-    duration: SnackbarDuration = SnackbarDuration.Short
-) {
-    scope.launch {
-        snackbarHostState.showSnackbar(
-            message = message,
-            duration = duration
-        )
-    }
-}
+    snackbarHostState: SnackbarHostState,
+    onMessageShown: () -> Unit = {}
+) = this.then(
+        Modifier.apply {
+            if (message.isNotEmpty()) {
+                LaunchedEffect(snackbarHostState) {
+                    snackbarHostState.showSnackbar(message)
+                    onMessageShown()
+                }
+            }
+        }
+    )
 ```
