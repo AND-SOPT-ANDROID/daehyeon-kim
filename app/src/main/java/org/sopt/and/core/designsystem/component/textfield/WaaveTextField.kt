@@ -1,4 +1,4 @@
-package org.sopt.and.ui.component.textField
+package org.sopt.and.core.designsystem.component.textfield
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
