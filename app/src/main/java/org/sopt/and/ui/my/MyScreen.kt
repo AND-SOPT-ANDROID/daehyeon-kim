@@ -1,5 +1,6 @@
 package org.sopt.and.ui.my
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,25 +23,36 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.sopt.and.R
 import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
 
 @Composable
-fun MyScreen() {
+fun MyScreen(
+    viewModel: MyViewModel = hiltViewModel()
+) {
     val userName: String = "username"
 
+    LaunchedEffect(Unit) {
+        Log.d("","asd")
+        viewModel.fetchUserHobby()
+    }
+
+    val hobby = viewModel.hobby
+
     Scaffold(
-        topBar = { MyScreenTopBar(userName) },
+        topBar = { MyScreenTopBar(hobby) },
         containerColor = Color.Black,
         content = { padding ->
             MyScreenContent(
-                padding = padding
+                padding = padding,
             )
         }
     )
@@ -49,14 +61,13 @@ fun MyScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyScreenTopBar(
-    userName: String
+    hobby: String,
 ) {
     TopAppBar(
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
-
             ) {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
@@ -64,7 +75,7 @@ fun MyScreenTopBar(
                     modifier = Modifier.size(60.dp)
                 )
                 Text(
-                    text = userName,
+                    text = hobby,
                     color = Color.White
                 )
             }

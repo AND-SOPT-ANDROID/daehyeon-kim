@@ -1,52 +1,60 @@
 package org.sopt.and.ui.signin
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import org.sopt.and.model.UserInfo
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import org.sopt.and.domain.usecase.LoginUseCase
+import javax.inject.Inject
 
-class SignInViewModel : ViewModel() {
+@HiltViewModel
+class SignInViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase
+) : ViewModel() {
 
-    private val _userEnteredInfo = mutableStateOf(UserInfo())
-    val userEnteredInfo: State<UserInfo> = _userEnteredInfo
+    var name by mutableStateOf("")
+        private set
 
-    private val _snackbarMessage = mutableStateOf("")
-    val snackbarMessage: State<String> = _snackbarMessage
+    var password by mutableStateOf("")
+        private set
 
-    private val _showPassword = mutableStateOf(false)
-    val showPassword: State<Boolean> = _showPassword
+    var snackbarMessage by mutableStateOf("")
+        private set
 
-    fun onEmailChanged(newEmail: String) {
-        _userEnteredInfo.value = userEnteredInfo.value.copy(email = newEmail)
+    var showPassword by mutableStateOf(false)
+        private set
+
+    var isLoggedIn by mutableStateOf(false)
+        private set
+
+    fun onNameChanged(newName: String) {
+        name = newName
     }
 
     fun onPasswordChanged(newPassword: String) {
-        _userEnteredInfo.value = userEnteredInfo.value.copy(password = newPassword)
-    }
-
-    fun validateSignInCredentials(userInfo: UserInfo, onLoginSuccess: () -> Unit) {
-        if (userInfo.email.isNotEmpty() && userInfo.password.isNotEmpty()) {
-            when {
-                _userEnteredInfo.value.email != userInfo.email -> {
-                    _snackbarMessage.value = "이메일이 일치하지 않습니다."
-                }
-
-                _userEnteredInfo.value.password != userInfo.password -> {
-                    _snackbarMessage.value = "비밀번호가 일치하지 않습니다."
-                }
-
-                else -> {
-                    onLoginSuccess()
-                }
-            }
-        }
+        password = newPassword
     }
 
     fun clearSnackbarMessage() {
-        _snackbarMessage.value = ""
+        snackbarMessage = ""
     }
 
     fun togglePasswordVisibility() {
-        _showPassword.value = !showPassword.value
+        showPassword = !showPassword
     }
+
+    fun login() = viewModelScope.launch {
+        val result = loginUseCase(name, password)
+
+        result.onSuccess {
+            snackbarMessage = "로그인 성공"
+            isLoggedIn = true
+        }.onFailure {
+            snackbarMessage = "로그인 실패: ${it.message}"
+        }
+    }
+
 }

@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.sopt.and.model.Top20Video
 import org.sopt.and.model.Video
 import org.sopt.and.ui.home.component.HomeTextButton
@@ -36,7 +36,7 @@ import org.sopt.and.ui.home.component.Top20VideoContent
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val mainVideoList = viewModel.mainVideoList
     val subVideoList = viewModel.subVideoList

@@ -11,51 +11,48 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.sopt.and.R
-import org.sopt.and.core.designsystem.component.textfield.WaaveTextField
-import org.sopt.and.core.designsystem.component.topbar.WaaveCenterAlignedTopBar
 import org.sopt.and.core.designsystem.theme.ANDANDROIDTheme
-import org.sopt.and.model.UserInfo
+import org.sopt.and.ui.signin.component.InputPasswordSection
+import org.sopt.and.ui.signin.component.InputUserNameSection
+import org.sopt.and.ui.signin.component.SignInTopBar
 
 @Composable
 fun SignInScreen(
-    viewModel: SignInViewModel = viewModel(),
-    userInfo: UserInfo,
+    viewModel: SignInViewModel = hiltViewModel(),
     navigationToHome: () -> Unit = {},
     navigationToSignUp: () -> Unit = {},
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage by viewModel.snackbarMessage
-    val userEnteredInfo by viewModel.userEnteredInfo
+    val snackbarMessage = viewModel.snackbarMessage
+    val isLoggedIn = viewModel.isLoggedIn
 
     if (snackbarMessage.isNotEmpty()) {
         LaunchedEffect(snackbarHostState) {
             snackbarHostState.showSnackbar(snackbarMessage)
             viewModel.clearSnackbarMessage()
+        }
+    }
+
+    if (isLoggedIn) {
+        LaunchedEffect(isLoggedIn) {
+            navigationToHome()
         }
     }
 
@@ -67,88 +64,55 @@ fun SignInScreen(
         content = { innerPadding ->
             SignInContent(
                 modifier = Modifier.padding(innerPadding),
-                userInfo = userInfo,
-                email = userEnteredInfo.email,
-                onEmailChanged = { viewModel.onEmailChanged(it) },
-                password = userEnteredInfo.password,
+                name = viewModel.name,
+                onNameChanged = { viewModel.onNameChanged(it) },
+                password = viewModel.password,
                 onPasswordChanged = { viewModel.onPasswordChanged(it) },
-                showPassword = viewModel.showPassword.value,
+                showPassword = viewModel.showPassword,
                 onTogglePasswordVisibility = { viewModel.togglePasswordVisibility() },
                 onSignUpClick = navigationToSignUp,
-                onSignInClick = { userInfo ->
-                    viewModel.validateSignInCredentials(
-                        userInfo,
-                        onLoginSuccess = navigationToHome
-                    )
-                },
+                onSignInClick = { viewModel.login() },
             )
         }
     )
 }
 
 @Composable
-private fun SignInTopBar() {
-    WaaveCenterAlignedTopBar(
-        titleText = stringResource(R.string.waave),
-        navigationIcon = {
-            IconButton(onClick = {}) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = Icons.AutoMirrored.Filled.ArrowBack.name,
-                    tint = Color.White
-                )
-            }
-        },
-    )
-}
-
-@Composable
 private fun SignInContent(
     modifier: Modifier,
-    userInfo: UserInfo,
-    email: String,
-    onEmailChanged: (String) -> Unit,
+    name: String,
+    onNameChanged: (String) -> Unit,
     password: String,
     onPasswordChanged: (String) -> Unit,
     showPassword: Boolean,
     onTogglePasswordVisibility: () -> Unit,
     onSignUpClick: () -> Unit,
-    onSignInClick: (UserInfo) -> Unit,
+    onSignInClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 15.dp, vertical = 35.dp)
     ) {
-        WaaveTextField(
-            value = email,
-            onValueChange = onEmailChanged,
-            placeholderValue = stringResource(R.string.email_or_id),
+
+        InputUserNameSection(
+            name = name,
+            onNameChanged = onNameChanged
         )
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        WaaveTextField(
-            value = password,
-            onValueChange = onPasswordChanged,
-            placeholderValue = stringResource(R.string.password),
-            trailingIcon = {
-                TextButton(
-                    onClick = onTogglePasswordVisibility,
-                ) {
-                    Text(
-                        text = if (showPassword) stringResource(R.string.password_hide) else stringResource(R.string.password_show),
-                        color = Color.White
-                    )
-                }
-            },
-            visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+        InputPasswordSection(
+            password = password,
+            onPasswordChanged = onPasswordChanged,
+            showPassword = showPassword,
+            onTogglePasswordVisibility = onTogglePasswordVisibility
         )
 
         Spacer(modifier = Modifier.height(30.dp))
 
         Button(
-            onClick = { onSignInClick(userInfo) },
+            onClick = { onSignInClick() },
             colors = ButtonDefaults.buttonColors(Color.Blue),
             modifier = Modifier
                 .fillMaxWidth()
@@ -197,8 +161,6 @@ private fun SignInContent(
 @Composable
 private fun PreViewSignInScreen() {
     ANDANDROIDTheme {
-        SignInScreen(
-            userInfo = UserInfo()
-        )
+        SignInScreen()
     }
 }

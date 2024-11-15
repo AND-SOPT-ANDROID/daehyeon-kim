@@ -11,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import org.sopt.and.core.navigation.MainTabRoute
 import org.sopt.and.core.navigation.Route
-import org.sopt.and.model.UserInfo
 import org.sopt.and.ui.home.navigation.navigateToHome
 import org.sopt.and.ui.my.navigation.navigateToMy
 import org.sopt.and.ui.search.navigation.navigateToSearch
@@ -19,7 +18,7 @@ import org.sopt.and.ui.search.navigation.navigateToSearch
 class MainNavigator(
     val navController: NavHostController,
 ) {
-    val startDestination = Route.SignIn()
+    val startDestination = Route.SignIn
 
     val currentTab: MainTab?
         @Composable get() = MainTab.find { tab ->
@@ -37,13 +36,12 @@ class MainNavigator(
     fun navigationToSignUp() = navController.navigate(Route.SignUp, navOptions)
 
     fun navigationToHome() = navController.navigate(MainTabRoute.Home) {
-        popUpTo(Route.SignIn("","")) {
+        popUpTo(Route.SignIn) {
             inclusive = true
         }
     }
 
-    fun navigationToSignIn(userInfo: UserInfo) =
-        navController.navigate(Route.SignIn(userInfo.email, userInfo.password), navOptions)
+    fun navigationToSignIn() = navController.navigate(Route.SignIn, navOptions)
 
     fun navigateMainTab(tab: MainTab) {
         val navOptions = navOptions {
