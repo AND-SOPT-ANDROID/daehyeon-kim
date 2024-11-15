@@ -63,6 +63,8 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.datastore.preferences)
+
     implementation(libs.kotlinx.serialization.json)
 
     implementation(platform(libs.okhttp.bom))
@@ -72,6 +74,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+
 
     testImplementation(libs.junit)
 
