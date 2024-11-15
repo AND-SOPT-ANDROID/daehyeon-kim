@@ -5,6 +5,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
+}
 
 val properties = Properties().apply {
     load(project.rootProject.file("local.properties").inputStream())
@@ -61,6 +64,14 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.bundles.retrofit)
+    implementation(libs.bundles.okhttp)
+
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit)
 
