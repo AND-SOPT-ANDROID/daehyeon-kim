@@ -41,7 +41,6 @@ fun MyScreen(
     val userName: String = "username"
 
     LaunchedEffect(Unit) {
-        Log.d("","asd")
         viewModel.fetchUserHobby()
     }
 
