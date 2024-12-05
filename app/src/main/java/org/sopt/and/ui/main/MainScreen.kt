@@ -76,7 +76,7 @@ private fun MainContent(
             )
 
             signUpNavGraph(
-                navigationToSignIn = { userInfo -> navigator.navigationToSignIn(userInfo) }
+                navigationToSignIn = { navigator.navigationToSignIn() }
             )
 
             homeNavGraph()

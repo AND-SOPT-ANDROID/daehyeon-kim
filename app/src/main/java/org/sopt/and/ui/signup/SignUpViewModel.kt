@@ -1,80 +1,90 @@
 package org.sopt.and.ui.signup
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import org.sopt.and.domain.register.usecase.ValidateUserRegisterUseCase
-import org.sopt.and.domain.register.validator.UserRegisterValidator
-import org.sopt.and.model.UserInfo
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import org.sopt.and.domain.usecase.RegisterUserUseCase
+import javax.inject.Inject
 
-class SignUpViewModel(
-    private val validator: UserRegisterValidator = UserRegisterValidator(),
-    private val validateUserRegisterUseCase: ValidateUserRegisterUseCase = ValidateUserRegisterUseCase(validator)
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val registerUserUseCase: RegisterUserUseCase
 ) : ViewModel() {
 
-    private val _userInfo = mutableStateOf(UserInfo())
-    val userInfo: State<UserInfo> = _userInfo
+    var userName by mutableStateOf("")
+        private set
 
-    private val _showPassword = mutableStateOf(false)
-    val showPassword: State<Boolean> = _showPassword
+    var password by mutableStateOf("")
+        private set
 
-    private val _snackbarMessage = mutableStateOf("")
-    val snackbarMessage: State<String> = _snackbarMessage
+    var showPassword by mutableStateOf(false)
+        private set
 
-    private val _isEmailValid = mutableStateOf(true)
-    val isEmailValid: State<Boolean> = _isEmailValid
+    var hobby by mutableStateOf("")
+        private set
 
-    private val _isPasswordValid = mutableStateOf(true)
-    val isPasswordValid: State<Boolean> = _isPasswordValid
+    var snackbarMessage by mutableStateOf("")
+        private set
 
-    fun onEmailChanged(newEmail: String) {
-        _userInfo.value = _userInfo.value.copy(email = newEmail)
+    var isLoading by mutableStateOf(false)
+        private set
+
+    var shouldNavigateToSignIn by mutableStateOf(false)
+        private set
+
+    fun onUserNameChanged(newUserName: String) {
+        userName = newUserName
     }
 
     fun onPasswordChanged(newPassword: String) {
-        _userInfo.value = _userInfo.value.copy(password = newPassword)
+        password = newPassword
     }
 
-    fun validateAndHandleEmailPassword(onValidationSuccess: (UserInfo) -> Unit) {
-        val result = validateUserRegisterUseCase(
-            email = _userInfo.value.email,
-            password = _userInfo.value.password
-        )
-
-        _isEmailValid.value = result.isEmailValid
-        _isPasswordValid.value = result.isPasswordValid
-
-        if (_isEmailValid.value && _isPasswordValid.value) {
-            onValidationSuccess(_userInfo.value)
-        }
-        handleValidationResult()
+    fun onHobbyChanged(newHobby: String) {
+        hobby = newHobby
     }
 
-    private fun handleValidationResult() {
-        when {
-            !_isEmailValid.value && !_isPasswordValid.value -> {
-                _snackbarMessage.value = "잘못된 이메일, 비밀번호 형식입니다."
-            }
-
-            !_isEmailValid.value -> {
-                _snackbarMessage.value = "잘못된 이메일 형식입니다."
-            }
-
-            !_isPasswordValid.value -> {
-                _snackbarMessage.value = "잘못된 비밀번호 형식입니다."
-            }
-        }
+    fun onSignUpComplete() {
+        shouldNavigateToSignIn = false
     }
 
     fun isSignUpButtonEnabled(): Boolean =
-        _userInfo.value.email.isNotBlank() && _userInfo.value.password.length >= 8
+        !isLoading && userName.isNotBlank() && password.isNotBlank() && hobby.isNotBlank()
+
+
+    fun signUp() = viewModelScope.launch {
+        isLoading = true
+        val result = registerUserUseCase(
+            userName = userName,
+            password = password,
+            hobby = hobby
+        )
+
+        try {
+            result
+                .onSuccess {
+                    snackbarMessage = "회원가입이 완료되었습니다."
+                    shouldNavigateToSignIn = true
+                }
+                .onFailure {
+                    snackbarMessage = "회원가입 실패: ${it.message}"
+                    shouldNavigateToSignIn = false
+                }
+        } finally {
+            isLoading = false
+        }
+    }
 
     fun clearSnackbarMessage() {
-        _snackbarMessage.value = ""
+        snackbarMessage = ""
     }
 
     fun togglePasswordVisibility() {
-        _showPassword.value = !showPassword.value
+        showPassword = !showPassword
     }
 
 }

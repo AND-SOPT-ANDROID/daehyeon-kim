@@ -2,11 +2,16 @@ package org.sopt.and.ui.home
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import org.sopt.and.R
 import org.sopt.and.model.Top20Video
 import org.sopt.and.model.Video
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+
+) : ViewModel() {
 
     private val _mainVideoList = mutableStateListOf(
         Video(videoId = 1, image = R.drawable.image1),

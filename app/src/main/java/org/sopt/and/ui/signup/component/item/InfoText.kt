@@ -1,4 +1,4 @@
-package org.sopt.and.ui.signup.component
+package org.sopt.and.ui.signup.component.item
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -23,7 +23,7 @@ fun InfoText(
     ) {
         Icon(
             imageVector = Icons.Outlined.Info,
-            contentDescription = "",
+            contentDescription = Icons.Outlined.Info.name,
             tint = Color.White,
             modifier = Modifier.size(20.dp)
         )

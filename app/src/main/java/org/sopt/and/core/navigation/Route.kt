@@ -4,10 +4,7 @@ import kotlinx.serialization.Serializable
 
 sealed interface Route {
     @Serializable
-    data class SignIn(
-        val email: String = "",
-        val password: String = ""
-    ) : Route
+    data object SignIn : Route
 
     @Serializable
     data object SignUp : Route
