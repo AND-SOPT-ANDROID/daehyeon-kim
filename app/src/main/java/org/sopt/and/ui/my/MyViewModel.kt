@@ -18,7 +18,6 @@ class MyViewModel @Inject constructor(
     var hobby by mutableStateOf("")
         private set
 
-
     fun fetchUserHobby() = viewModelScope.launch {
         val result = fetchMyHobbyUseCase()
 

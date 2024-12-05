@@ -14,7 +14,7 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideCoinService(retrofit: Retrofit): UserService =
+    fun provideUserService(retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
 
 }

@@ -1,12 +1,12 @@
 package org.sopt.and.domain.usecase
 
-import org.sopt.and.data.repositoryimpl.UserRepositoryImpl
+import org.sopt.and.domain.repository.UserRepository
 import javax.inject.Inject
 
 class FetchMyHobbyUseCase @Inject constructor(
-    private val userRepositoryImpl: UserRepositoryImpl
+    private val userRepository: UserRepository
 ) {
 
     suspend operator fun invoke(): Result<String> =
-        userRepositoryImpl.fetchUserHobby()
+        userRepository.fetchUserHobby()
 }
