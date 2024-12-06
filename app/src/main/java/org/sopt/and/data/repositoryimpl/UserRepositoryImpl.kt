@@ -10,9 +10,9 @@ import org.sopt.and.data.mapper.UserMapper
 import org.sopt.and.domain.model.Login
 import org.sopt.and.domain.model.User
 import org.sopt.and.domain.repository.UserRepository
-import org.sopt.and.domain.util.error.HobbyError
-import org.sopt.and.domain.util.error.LoginError
-import org.sopt.and.domain.util.error.RegisterError
+import org.sopt.and.data.util.error.HobbyError
+import org.sopt.and.data.util.error.LoginError
+import org.sopt.and.data.util.error.RegisterError
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(

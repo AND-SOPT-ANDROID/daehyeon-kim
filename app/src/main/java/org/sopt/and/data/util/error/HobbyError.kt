@@ -1,4 +1,4 @@
-package org.sopt.and.domain.util.error
+package org.sopt.and.data.util.error
 
 sealed class HobbyError : Exception() {
     data class MissingToken(override val message: String) : HobbyError()
