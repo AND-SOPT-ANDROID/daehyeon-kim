@@ -1,4 +1,4 @@
-package org.sopt.and.domain.util.error
+package org.sopt.and.data.util.error
 
 sealed class RegisterError : Exception() {
     data class InvalidLength(override val message: String) : RegisterError()

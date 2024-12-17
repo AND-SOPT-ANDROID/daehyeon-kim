@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ResponseRegisterUserDto(
     @SerialName("no")
-    val no: Int
+    val registerNumber: Int
 )

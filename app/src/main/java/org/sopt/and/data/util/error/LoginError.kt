@@ -1,4 +1,4 @@
-package org.sopt.and.domain.util.error
+package org.sopt.and.data.util.error
 
 sealed class LoginError : Exception() {
     data class InvalidRequest(override val message: String) : LoginError()
